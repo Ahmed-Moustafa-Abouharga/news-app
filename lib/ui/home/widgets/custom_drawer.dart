@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:news_app/app_styles/app_theme.dart';
+import 'package:news_app/ui/categories/categories_widget.dart';
+import 'package:news_app/ui/home/HomeScreen.dart';
+import 'package:news_app/ui/settings/settings_widget.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({super.key});
+   CustomDrawer({required this.onPress,});
+  void Function(DrawerTabs) onPress ;
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +25,8 @@ class CustomDrawer extends StatelessWidget {
         ),
         SizedBox(height: 29.h,),
         InkWell(
-          onTap: ()
-          {
-            //show categories widget in home screen
+          onTap:() {
+            onPress(DrawerTabs.categories);
           },
           child: Padding(
             padding:  REdgeInsets.only(left: 16),
@@ -40,7 +43,7 @@ class CustomDrawer extends StatelessWidget {
         InkWell(
           onTap: ()
           {
-            //show categories widget in home screen
+            onPress(DrawerTabs.settings) ;
           },
           child: Padding(
             padding:  REdgeInsets.only(left: 16),

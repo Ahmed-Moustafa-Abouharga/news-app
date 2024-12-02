@@ -6,6 +6,11 @@ import 'package:news_app/main.dart';
 class AppTheme{
   static ThemeData lightTheme = ThemeData(
     textTheme: TextTheme(
+      titleSmall: TextStyle(
+        fontSize: 22.sp,
+        fontWeight: FontWeight.w700,
+        color: AppColors.greyColor
+      ),
       headlineMedium: TextStyle(
         fontWeight: FontWeight.w700,
         fontSize: 24.sp,
