@@ -20,7 +20,14 @@ class AppTheme{
         fontWeight: FontWeight.w700,
         fontSize: 24.sp,
         color: AppColors.iconColor,
-      )
+      ),
+      headlineSmall: TextStyle(
+        fontSize: 14.sp,
+        fontWeight: FontWeight.w500,
+        color: Color(0xff42505C)
+      ),
+      displaySmall: TextStyle(fontWeight: FontWeight.w300,
+      fontSize: 13.sp,color: Color(0xff42505C))
     ),
     appBarTheme: AppBarTheme(
       iconTheme: IconThemeData(

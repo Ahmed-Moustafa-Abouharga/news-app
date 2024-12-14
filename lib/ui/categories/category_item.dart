@@ -11,12 +11,12 @@ class CategoryItem extends StatelessWidget {
       required this.onPress});
   final int index;
   final CategoryModel categoryModel;
-  final void Function() onPress;
+  final void Function(String) onPress;
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        onPress();
+        onPress(categoryModel.id);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -25,9 +25,9 @@ class CategoryItem extends StatelessWidget {
               topLeft: Radius.circular(25.r),
               topRight: Radius.circular(25.r),
               bottomRight:
-                  index.isEven ? Radius.circular(25.r) : Radius.circular(0),
+                  index.isEven ? Radius.circular(25.r) : const Radius.circular(0),
               bottomLeft:
-                  index.isOdd ? Radius.circular(25.r) : Radius.circular(0),
+                  index.isOdd ? Radius.circular(25.r) : const Radius.circular(0),
             )),
         child: Column(
           children: [

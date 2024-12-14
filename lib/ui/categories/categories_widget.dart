@@ -5,7 +5,7 @@ import 'package:news_app/ui/categories/category_item.dart';
 
 class CategoriesWidget extends StatelessWidget {
   const CategoriesWidget({super.key, required this.onPress});
- final void Function() onPress;
+ final void Function(String category) onPress;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -30,7 +30,8 @@ class CategoriesWidget extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return CategoryItem(
                   categoryModel: CategoryModel.categories[index],
-                  index: index, onPress: onPress,
+                  index: index,
+                  onPress: onPress,
                 );
               },
               itemCount: CategoryModel.categories.length,
