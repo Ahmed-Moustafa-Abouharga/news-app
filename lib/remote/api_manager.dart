@@ -8,7 +8,7 @@ import 'package:news_app/remote/constants.dart';
 class ApiManager {
 static Future<SourcesResponse?> getSources(String category) async {
     //https://newsapi.org/v2/top-headlines/sources?apiKey=1a2b28d061884fd8a9d021a3d3abcbd3
-    try {
+
       Uri url = Uri.https(baseUrl, sourcesEndPoint, {
         "category": category,
         "apiKey": apiKey,
@@ -19,9 +19,7 @@ static Future<SourcesResponse?> getSources(String category) async {
       Map<String, dynamic> json = jsonDecode(response.body);
     SourcesResponse sourcesResponse = SourcesResponse.fromJson(json) ;
     return sourcesResponse;
-    } catch (error) {
-      print(error.toString());
-    }
+
   }
 
   static Future<ArticlesResponse?> getArticles(String sourceId,)async
@@ -46,17 +44,13 @@ static Future<SourcesResponse?> getSources(String category) async {
 
   static Future<ArticlesResponse?> search(String searchArticle,String category)async
   {
-    try{
       Uri url = Uri.https(baseUrl, articlesEndPoint,
           {"q": searchArticle, "apiKey": apiKey,"category":category});
       var response = await http.get(url);
       var json = jsonDecode(response.body);
       var articleResponse = ArticlesResponse.fromJson(json);
       return articleResponse;
-    }
-    catch (e)
-    {
-      print(e.toString()) ;
-    }
+
+
   }
 }
