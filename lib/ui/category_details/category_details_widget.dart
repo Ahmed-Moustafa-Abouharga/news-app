@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:news_app/app_styles/app_theme.dart';
 import 'package:news_app/remote/api_manager.dart';
 import 'package:news_app/ui/category_details/article_list.dart';
+import 'package:news_app/ui/category_details/categories_details_view_model.dart';
 
 import '../../model/sources_resposnse/Sources.dart';
 
 class CategoryDetailsWidget extends StatefulWidget {
-  CategoryDetailsWidget({super.key, required this.category,});
+  CategoryDetailsWidget({
+    super.key,
+    required this.category,
+  });
   final String category;
   @override
   State<CategoryDetailsWidget> createState() => _CategoryDetailsWidgetState();
@@ -16,7 +21,76 @@ class CategoryDetailsWidget extends StatefulWidget {
 class _CategoryDetailsWidgetState extends State<CategoryDetailsWidget> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return BlocProvider(
+      create: (context) =>
+          CategoryDetailsViewModel()..getSources(widget.category),
+      child: BlocBuilder<CategoryDetailsViewModel, CategoryDetailsState>(
+        builder: (context, state)
+        {
+          if(state is SuccessState) {
+            List<Source>? sources = state.sources;
+            return DefaultTabController(
+                length: sources.length,
+                child: Padding(
+                  padding: REdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      TabBar(
+                        isScrollable: true,
+                        indicator: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        dividerHeight: 0,
+                        labelColor: Colors.white,
+                        tabs: sources
+                            .map(
+                              (source) => Tab(
+                            child: Container(
+                              padding: REdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 7,
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary),
+                                borderRadius: BorderRadius.circular(25.r),
+                              ),
+                              child: Text(source.name ?? ""),
+                            ),
+                          ),
+                        )
+                            .toList(),
+                      ),
+                      Expanded(
+                          child: TabBarView(
+                              children: sources
+                                  .map(
+                                    (source) => ArticlesList(
+                                  sourceId: source.id ?? "",
+                                ),
+                              )
+                                  .toList()))
+                    ],
+                  ),
+                ));
+          }
+          if(state is ErrorState)
+            {
+              return Column(
+                children: [
+                  Text(state.errMsg),
+                  ElevatedButton(onPressed: (){}, child:Text("Try Again"))
+                ],
+              );
+            }
+          return Center(child: CircularProgressIndicator(),) ; 
+
+          },
+      ),
+    );
+    /* return FutureBuilder(
         future: ApiManager.getSources(widget.category),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -97,7 +171,6 @@ class _CategoryDetailsWidgetState extends State<CategoryDetailsWidget> {
                   ],
                 ),
               ));
-        });
+        });*/
   }
-
 }
