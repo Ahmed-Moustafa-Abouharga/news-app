@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:news_app/DI/di.dart';
+import 'package:news_app/data/data_source_impl/NewsDaoImpl.dart';
+import 'package:news_app/data/repository_impl/NewsApiRepoImpl.dart';
 import 'package:news_app/model/article_model.dart';
 import 'package:news_app/model/articles_response/ArticlesResponse.dart';
 import 'package:news_app/remote/api_manager.dart';
+import 'package:news_app/repository/NewsRepo.dart';
 import 'package:news_app/ui/category_details/article_item.dart';
 import 'package:news_app/ui/category_details/articles_list_view_model.dart';
 
@@ -22,7 +26,7 @@ class _ArticlesListState extends State<ArticlesList> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          ArticlesListViewModel()..getArticles(widget.sourceId),
+          getIt.get<ArticlesListViewModel>()..getArticles(widget.sourceId),
       child: BlocBuilder<ArticlesListViewModel,ArticlesListStata>(builder: (context,state)
       {
         if(state is SuccessState)

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:news_app/DI/di.dart';
 import 'package:news_app/app_styles/app_theme.dart';
+import 'package:news_app/data/data_source_impl/SourcesDaoImpl.dart';
+import 'package:news_app/data/repository_impl/SourcesRepoImpl.dart';
 import 'package:news_app/remote/api_manager.dart';
 import 'package:news_app/ui/category_details/article_list.dart';
 import 'package:news_app/ui/category_details/categories_details_view_model.dart';
@@ -22,12 +25,10 @@ class _CategoryDetailsWidgetState extends State<CategoryDetailsWidget> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          CategoryDetailsViewModel()..getSources(widget.category),
+      create: (context) =>getIt.get<CategoryDetailsViewModel>()..getSources(widget.category),
       child: BlocBuilder<CategoryDetailsViewModel, CategoryDetailsState>(
-        builder: (context, state)
-        {
-          if(state is SuccessState) {
+        builder: (context, state) {
+          if (state is SuccessState) {
             List<Source>? sources = state.sources;
             return DefaultTabController(
                 length: sources.length,
@@ -45,22 +46,22 @@ class _CategoryDetailsWidgetState extends State<CategoryDetailsWidget> {
                         tabs: sources
                             .map(
                               (source) => Tab(
-                            child: Container(
-                              padding: REdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 7,
+                                child: Container(
+                                  padding: REdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 7,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                                    borderRadius: BorderRadius.circular(25.r),
+                                  ),
+                                  child: Text(source.name ?? ""),
+                                ),
                               ),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primary),
-                                borderRadius: BorderRadius.circular(25.r),
-                              ),
-                              child: Text(source.name ?? ""),
-                            ),
-                          ),
-                        )
+                            )
                             .toList(),
                       ),
                       Expanded(
@@ -68,26 +69,26 @@ class _CategoryDetailsWidgetState extends State<CategoryDetailsWidget> {
                               children: sources
                                   .map(
                                     (source) => ArticlesList(
-                                  sourceId: source.id ?? "",
-                                ),
-                              )
+                                      sourceId: source.id ?? "",
+                                    ),
+                                  )
                                   .toList()))
                     ],
                   ),
                 ));
           }
-          if(state is ErrorState)
-            {
-              return Column(
-                children: [
-                  Text(state.errMsg),
-                  ElevatedButton(onPressed: (){}, child:Text("Try Again"))
-                ],
-              );
-            }
-          return Center(child: CircularProgressIndicator(),) ; 
-
-          },
+          if (state is ErrorState) {
+            return Column(
+              children: [
+                Text(state.errMsg),
+                ElevatedButton(onPressed: () {}, child: Text("Try Again"))
+              ],
+            );
+          }
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
     );
     /* return FutureBuilder(
